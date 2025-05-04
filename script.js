@@ -2,7 +2,27 @@
 document.addEventListener('DOMContentLoaded', () => {
   fetchAlbums();
   setupVinylControls();
+  setupAppleMusicButton();
 });
+
+// Additional setup for Apple Music button
+function setupAppleMusicButton() {
+  const appleMusicButton = document.querySelector('.apple-music-button');
+  
+  // For iOS devices, we need to ensure the URL opens in Safari first
+  // which will then hand off to the Apple Music app
+  if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    appleMusicButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Get the href which should be a properly formatted web URL
+      const musicUrl = this.href;
+      
+      // Open in the same window to ensure proper handoff to Apple Music app
+      window.location.href = musicUrl;
+    });
+  }
+}
 
 // Fetch albums from the API
 async function fetchAlbums() {
@@ -112,7 +132,23 @@ function displayAlbum(album) {
   // Set up Apple Music button
   const appleMusicButton = document.querySelector('.apple-music-button');
   if (album.appleMusicUrl && album.appleMusicUrl.trim() !== '') {
-    appleMusicButton.href = album.appleMusicUrl;
+    let musicUrl = album.appleMusicUrl;
+    
+    // Check if we need to reformat the URL for iOS
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      // Convert to universal link format that works better on iOS
+      if (musicUrl.includes('music.apple.com')) {
+        // Make sure we're using https://
+        if (!musicUrl.startsWith('https://')) {
+          musicUrl = 'https://' + musicUrl.replace(/^https?:\/\//, '');
+        }
+      } else if (musicUrl.includes('itunes.apple.com')) {
+        // Convert iTunes links to music.apple.com links which work better
+        musicUrl = musicUrl.replace('itunes.apple.com', 'music.apple.com');
+      }
+    }
+    
+    appleMusicButton.href = musicUrl;
     appleMusicButton.classList.remove('hidden');
   } else {
     appleMusicButton.classList.add('hidden');
