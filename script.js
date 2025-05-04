@@ -113,9 +113,9 @@ function displayAlbum(album) {
   const appleMusicButton = document.querySelector('.apple-music-button');
   if (album.appleMusicUrl && album.appleMusicUrl.trim() !== '') {
     appleMusicButton.href = album.appleMusicUrl;
-    appleMusicButton.style.display = 'flex';
+    appleMusicButton.classList.remove('hidden');
   } else {
-    appleMusicButton.style.display = 'none';
+    appleMusicButton.classList.add('hidden');
   }
 }
 

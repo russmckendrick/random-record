@@ -238,6 +238,10 @@ body {
   filter: brightness(0) invert(1);
 }
 
+.hidden {
+  display: none !important;
+}
+
 @keyframes spin {
   100% {
     transform: rotate(360deg);
