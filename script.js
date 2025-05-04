@@ -108,6 +108,15 @@ function displayAlbum(album) {
   } else {
     dateEl.parentElement.style.display = 'none';
   }
+  
+  // Set up Apple Music button
+  const appleMusicButton = document.querySelector('.apple-music-button');
+  if (album.appleMusicUrl && album.appleMusicUrl.trim() !== '') {
+    appleMusicButton.href = album.appleMusicUrl;
+    appleMusicButton.style.display = 'flex';
+  } else {
+    appleMusicButton.style.display = 'none';
+  }
 }
 
 // Vinyl spin control
