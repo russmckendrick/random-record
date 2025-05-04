@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Album Collection</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="cover-art">
+            <img src="cover.jpg" alt="Album Cover">
+        </div>
+        <div class="vinyl-container">
+            <div class="vinyl">
+                <div class="label">
+                    <img src="cover.jpg" alt="Record Label">
+                </div>
+            </div>
+        </div>
+        <div class="album-info">
+            <h1 class="album-title"></h1>
+            <h2 class="album-artist"></h2>
+            <div class="album-metadata">
+                <div class="metadata-item">
+                    <span class="metadata-label">Release Year:</span>
+                    <span class="album-date"></span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Genres:</span>
+                    <span class="album-genres"></span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Styles:</span>
+                    <span class="album-styles"></span>
+                </div>
+            </div>
+            <button class="refresh-button">Get Another Album</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
