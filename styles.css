@@ -37,8 +37,8 @@ body {
 }
 
 .cover-art img {
-  width: 480px;
-  height: 480px;
+  width: 525px;
+  height: 525px;
   object-fit: cover;
   border-radius: 1rem;
   box-shadow: var(--shadow);
@@ -255,8 +255,8 @@ body {
   }
   
   .cover-art img {
-    width: 320px;
-    height: 320px;
+    width: 345px;
+    height: 345px;
   }
   
   .vinyl {
@@ -301,8 +301,8 @@ body {
   }
   
   .cover-art img {
-    width: 280px;
-    height: 280px;
+    width: 285px;
+    height: 285px;
   }
   
   .vinyl {
