@@ -43,6 +43,17 @@ body {
   border-radius: 1rem;
   box-shadow: var(--shadow);
   background: #222;
+  transition: opacity 0.5s ease, filter 0.3s ease;
+}
+
+.cover-art img.loading {
+  opacity: 0.7;
+  filter: blur(2px);
+}
+
+.cover-art img.loaded {
+  opacity: 1;
+  filter: blur(0);
 }
 
 .cover-art a {
@@ -66,9 +77,9 @@ body {
 .vinyl {
   width: 520px;
   height: 520px;
-  background: #111;
+  background: radial-gradient(circle at center, #111 0%, #0a0a0a 50%, #000 100%);
   border-radius: 50%;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow), inset 0 0 50px rgba(0,0,0,0.8);
   position: relative;
   display: flex;
   align-items: center;
@@ -76,6 +87,43 @@ body {
   animation: spin 3s linear infinite;
   pointer-events: auto;
   cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.vinyl::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(255,255,255,0.02) 0.5deg,
+    transparent 1deg
+  );
+  pointer-events: none;
+}
+
+.vinyl::after {
+  content: '';
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle at center,
+    transparent 0px,
+    rgba(255,255,255,0.01) 1px,
+    transparent 2px,
+    transparent 8px
+  );
+  pointer-events: none;
+}
+
+.vinyl:hover {
+  transform: scale(1.02);
+  box-shadow: var(--shadow), inset 0 0 50px rgba(0,0,0,0.8), 0 0 30px rgba(231, 76, 60, 0.2);
 }
 
 .label {
@@ -242,9 +290,86 @@ body {
   display: none !important;
 }
 
+.loading-spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255,255,255,0.1);
+  border-top: 3px solid var(--accent);
+  border-radius: 50%;
+  animation: loading-spin 1s linear infinite;
+  z-index: 1000;
+}
+
+.fade-transition {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.fade-transition.visible {
+  opacity: 1;
+}
+
+.album-info {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.album-info.loading {
+  opacity: 0.7;
+  transform: translateY(10px);
+}
+
+.share-button {
+  background: #9b59b6;
+  margin-top: 0.5rem;
+}
+
+.share-button:hover {
+  background: #8e44ad;
+  transform: translateY(-2px);
+}
+
+.share-button:active {
+  transform: translateY(0);
+}
+
+.favorites-button {
+  background: #f39c12;
+  margin-top: 0.5rem;
+}
+
+.favorites-button:hover {
+  background: #e67e22;
+  transform: translateY(-2px);
+}
+
+.favorites-button:active {
+  transform: translateY(0);
+}
+
+.favorites-button.favorited {
+  background: #e74c3c;
+}
+
+.favorites-button.favorited:hover {
+  background: #c0392b;
+}
+
 @keyframes spin {
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes loading-spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
