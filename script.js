@@ -6,10 +6,6 @@ class AlbumCollection {
     this.albumHistory = [];
     this.maxHistory = 10;
     this.isLoading = false;
-    this.swipeThreshold = 100;
-    this.touchStartX = 0;
-    this.touchStartY = 0;
-    this.currentSwipeOffset = 0;
     
     this.init();
   }
@@ -17,22 +13,7 @@ class AlbumCollection {
   async init() {
     await this.fetchAlbums();
     this.setupEventListeners();
-    this.setupSwipeGestures();
     this.setupKeyboardControls();
-    this.showSwipeIndicator();
-  }
-
-  // Show swipe indicator on mobile
-  showSwipeIndicator() {
-    if (this.isMobile()) {
-      const indicator = document.querySelector('.swipe-indicator');
-      indicator.classList.add('show');
-      
-      // Hide after 3 seconds
-      setTimeout(() => {
-        indicator.classList.remove('show');
-      }, 3000);
-    }
   }
 
   isMobile() {
@@ -323,126 +304,7 @@ class AlbumCollection {
     }
   }
 
-  // Setup swipe gestures
-  setupSwipeGestures() {
-    const container = document.querySelector('.container');
-    
-    // Touch events
-    container.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: true });
-    container.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
-    container.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: true });
-    
-    // Mouse events for desktop testing (only if not mobile)
-    if (!this.isMobile()) {
-      container.addEventListener('mousedown', (e) => this.handleMouseStart(e));
-      container.addEventListener('mousemove', (e) => this.handleMouseMove(e));
-      container.addEventListener('mouseup', (e) => this.handleMouseEnd(e));
-      container.addEventListener('mouseleave', (e) => this.handleMouseEnd(e));
-    }
-  }
 
-  // Touch start
-  handleTouchStart(e) {
-    this.touchStartX = e.touches[0].clientX;
-    this.touchStartY = e.touches[0].clientY;
-    this.currentSwipeOffset = 0;
-  }
-
-  // Touch move
-  handleTouchMove(e) {
-    if (!this.touchStartX) return;
-    
-    const currentX = e.touches[0].clientX;
-    const currentY = e.touches[0].clientY;
-    const diffX = currentX - this.touchStartX;
-    const diffY = currentY - this.touchStartY;
-    
-    // Only handle horizontal swipes
-    if (Math.abs(diffX) > Math.abs(diffY)) {
-      e.preventDefault();
-      
-      this.currentSwipeOffset = diffX * 0.3; // Damping factor
-      const container = document.querySelector('.container');
-      container.style.setProperty('--swipe-offset', `${this.currentSwipeOffset}px`);
-      container.classList.add('swiping');
-    }
-  }
-
-  // Touch end
-  handleTouchEnd(e) {
-    if (!this.touchStartX) return;
-    
-    const container = document.querySelector('.container');
-    container.classList.remove('swiping');
-    container.classList.add('swipe-release');
-    container.style.setProperty('--swipe-offset', '0px');
-    
-    // Check if swipe was significant enough
-    if (Math.abs(this.currentSwipeOffset) > this.swipeThreshold) {
-      this.displayRandomAlbum();
-    }
-    
-    // Reset
-    setTimeout(() => {
-      container.classList.remove('swipe-release');
-    }, 300);
-    
-    this.touchStartX = 0;
-    this.touchStartY = 0;
-    this.currentSwipeOffset = 0;
-  }
-
-  // Mouse events (for desktop testing)
-  handleMouseStart(e) {
-    // Don't start drag if clicking on vinyl or buttons
-    if (e.target.closest('.vinyl') || e.target.closest('button') || e.target.closest('a')) {
-      return;
-    }
-    
-    this.touchStartX = e.clientX;
-    this.touchStartY = e.clientY;
-    this.currentSwipeOffset = 0;
-    this.isDragging = true;
-    e.preventDefault();
-  }
-
-  handleMouseMove(e) {
-    if (!this.isDragging || !this.touchStartX) return;
-    
-    const diffX = e.clientX - this.touchStartX;
-    const diffY = e.clientY - this.touchStartY;
-    
-    // Only start swiping if we've moved enough horizontally
-    if (Math.abs(diffX) > 10 && Math.abs(diffX) > Math.abs(diffY)) {
-      this.currentSwipeOffset = diffX * 0.3;
-      const container = document.querySelector('.container');
-      container.style.setProperty('--swipe-offset', `${this.currentSwipeOffset}px`);
-      container.classList.add('swiping');
-      e.preventDefault();
-    }
-  }
-
-  handleMouseEnd(e) {
-    if (!this.isDragging) return;
-    
-    const container = document.querySelector('.container');
-    container.classList.remove('swiping');
-    container.classList.add('swipe-release');
-    container.style.setProperty('--swipe-offset', '0px');
-    
-    if (Math.abs(this.currentSwipeOffset) > this.swipeThreshold) {
-      this.displayRandomAlbum();
-    }
-    
-    setTimeout(() => {
-      container.classList.remove('swipe-release');
-    }, 300);
-    
-    this.isDragging = false;
-    this.touchStartX = 0;
-    this.touchStartY = 0;
-    this.currentSwipeOffset = 0;
-  }
 
   // Setup keyboard controls
   setupKeyboardControls() {
